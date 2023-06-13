@@ -1,5 +1,6 @@
 package com.rbcl.orgs.ui.recyclerview.adapter
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
@@ -10,17 +11,19 @@ import com.rbcl.orgs.R
 import com.rbcl.orgs.model.Produto
 
 class ListaProdutosAdapter(
-    private val produtos: List<Produto>,
+    produtos: List<Produto>,
     private val context: Context
 ) : RecyclerView.Adapter<ListaProdutosAdapter.ViewHolder>() {
 
+    private val produtos = produtos.toMutableList()
+
     class ViewHolder(view: View): RecyclerView.ViewHolder(view) {
         fun vincular(produto: Produto) {
-            val nome = itemView.findViewById<TextView>(R.id.nome)
+            val nome = itemView.findViewById<TextView>(R.id.produto_item_nome)
             nome.text = produto.nome
-            val descricao = itemView.findViewById<TextView>(R.id.descricao)
+            val descricao = itemView.findViewById<TextView>(R.id.produto_item_descricao)
             descricao.text = produto.descricao
-            val valor = itemView.findViewById<TextView>(R.id.valor)
+            val valor = itemView.findViewById<TextView>(R.id.produto_item_valor)
             valor.text = produto.valor.toPlainString()
         }
     }
@@ -40,6 +43,13 @@ class ListaProdutosAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val produto = produtos[position]
         holder.vincular(produto)
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    fun atualiza(produtos: List<Produto>) {
+        this.produtos.clear()
+        this.produtos.addAll(produtos)
+        notifyDataSetChanged()
     }
 
 }
