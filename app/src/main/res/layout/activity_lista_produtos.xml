@@ -17,7 +17,7 @@
         tools:listitem="@layout/produto_item"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:id="@+id/activity_lista_produtos_fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -27,6 +27,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@drawable/ic_action_add"
         android:focusable="true"
-        android:contentDescription="@string/add_product" />
-
+        android:text="@string/add_product"
+        app:icon="@drawable/ic_action_add"
+        android:contentDescription="@string/add_product"
+        app:iconTint="@color/white"
+        android:textColor="@color/white"
+        android:backgroundTint="@android:color/holo_green_dark"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
