@@ -3,9 +3,10 @@ package com.rbcl.orgs.ui.activity
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
-import com.rbcl.orgs.R
+import coil.load
 import com.rbcl.orgs.dao.ProdutosDao
 import com.rbcl.orgs.databinding.ActivityFormularioProdutoBinding
+import com.rbcl.orgs.databinding.FormularioImagemBinding
 import com.rbcl.orgs.model.Produto
 import java.math.BigDecimal
 
@@ -23,12 +24,32 @@ class FormularioProdutoActivity : AppCompatActivity() {
 
     private fun configuraDialogImagem() {
         binding.activityFormularioProdutoImagem.setOnClickListener {
-            AlertDialog.Builder(this@FormularioProdutoActivity)
-                .setPositiveButton("Positivo") { _, _ -> }
-                .setNegativeButton("Negativo") { _, _ -> }
-                .setView(R.layout.formulario_imagem)
-                .show()
+            val bindingFormularioImagem = FormularioImagemBinding.inflate(layoutInflater)
+            configuraBotaoCarregarImagem(bindingFormularioImagem)
+            configureDialog(bindingFormularioImagem)
         }
+    }
+
+    private fun configuraBotaoCarregarImagem(bindingFormularioImagem: FormularioImagemBinding) {
+        bindingFormularioImagem.formularioImagemBotaoCarregar.setOnClickListener {
+            val url = bindingFormularioImagem.formularioImagemInputEdittextUrl.text.toString()
+            bindingFormularioImagem.formularioImagemImagemview.load(url)
+        }
+    }
+
+    private fun configureDialog(bindingFormularioImagem: FormularioImagemBinding) {
+        AlertDialog.Builder(this@FormularioProdutoActivity)
+            .setPositiveButton("Positivo") { _, _ ->
+                confirmeImagem(bindingFormularioImagem)
+            }
+            .setNegativeButton("Negativo") { _, _ -> }
+            .setView(bindingFormularioImagem.root)
+            .show()
+    }
+
+    private fun confirmeImagem(bindingFormularioImagem: FormularioImagemBinding) {
+        val url = bindingFormularioImagem.formularioImagemInputEdittextUrl.text.toString()
+        binding.activityFormularioProdutoImagem.load(url)
     }
 
     private fun configuraBotaoSalvar() {
