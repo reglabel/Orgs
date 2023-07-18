@@ -5,4 +5,6 @@
     <string name="value">Valor</string>
     <string name="save">Salvar</string>
     <string name="add_product">Adicionar produto</string>
+    <string name="carregar">Carregar</string>
+    <string name="url_da_imagem">URL da imagem</string>
 </resources>
