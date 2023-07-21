@@ -2,54 +2,31 @@ package com.rbcl.orgs.ui.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.appcompat.app.AlertDialog
-import coil.load
+import com.rbcl.orgs.R
 import com.rbcl.orgs.dao.ProdutosDao
 import com.rbcl.orgs.databinding.ActivityFormularioProdutoBinding
-import com.rbcl.orgs.databinding.FormularioImagemBinding
+import com.rbcl.orgs.extensions.tentaCarregarImagem
 import com.rbcl.orgs.model.Produto
+import com.rbcl.orgs.ui.dialog.FormularioImagemDialog
 import java.math.BigDecimal
 
 class FormularioProdutoActivity : AppCompatActivity() {
     private val binding by lazy {
         ActivityFormularioProdutoBinding.inflate(layoutInflater)
     }
+    private var url: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         configuraBotaoSalvar()
-        configuraDialogImagem()
-    }
-
-    private fun configuraDialogImagem() {
-        binding.activityFormularioProdutoImagem.setOnClickListener {
-            val bindingFormularioImagem = FormularioImagemBinding.inflate(layoutInflater)
-            configuraBotaoCarregarImagem(bindingFormularioImagem)
-            configureDialog(bindingFormularioImagem)
-        }
-    }
-
-    private fun configuraBotaoCarregarImagem(bindingFormularioImagem: FormularioImagemBinding) {
-        bindingFormularioImagem.formularioImagemBotaoCarregar.setOnClickListener {
-            val url = bindingFormularioImagem.formularioImagemInputEdittextUrl.text.toString()
-            bindingFormularioImagem.formularioImagemImagemview.load(url)
-        }
-    }
-
-    private fun configureDialog(bindingFormularioImagem: FormularioImagemBinding) {
-        AlertDialog.Builder(this@FormularioProdutoActivity)
-            .setPositiveButton("Positivo") { _, _ ->
-                confirmeImagem(bindingFormularioImagem)
+        title = getString(R.string.cadastrar_produto)
+        binding.activityFormularioProdutoImagem.setOnClickListener{
+            FormularioImagemDialog(this).mostra(url) { imagem ->
+                url = imagem
+                binding.activityFormularioProdutoImagem.tentaCarregarImagem(url)
             }
-            .setNegativeButton("Negativo") { _, _ -> }
-            .setView(bindingFormularioImagem.root)
-            .show()
-    }
-
-    private fun confirmeImagem(bindingFormularioImagem: FormularioImagemBinding) {
-        val url = bindingFormularioImagem.formularioImagemInputEdittextUrl.text.toString()
-        binding.activityFormularioProdutoImagem.load(url)
+        }
     }
 
     private fun configuraBotaoSalvar() {
@@ -75,7 +52,6 @@ class FormularioProdutoActivity : AppCompatActivity() {
             BigDecimal.ZERO
         } else BigDecimal(campoValor.text.toString())
 
-        val novoProduto = Produto(nome, descricao, valor)
-        return novoProduto
+        return Produto(nome, descricao, valor, url)
     }
 }

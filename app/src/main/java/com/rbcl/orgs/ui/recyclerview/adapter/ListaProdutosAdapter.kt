@@ -2,11 +2,16 @@ package com.rbcl.orgs.ui.recyclerview.adapter
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.os.Build
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import coil.load
+import coil.ImageLoader
+import coil.decode.GifDecoder
+import coil.decode.ImageDecoderDecoder
 import com.rbcl.orgs.databinding.ProdutoItemBinding
+import com.rbcl.orgs.extensions.tentaCarregarImagem
 import com.rbcl.orgs.model.Produto
 import java.math.BigDecimal
 import java.text.NumberFormat
@@ -18,6 +23,7 @@ class ListaProdutosAdapter(
 ) : RecyclerView.Adapter<ListaProdutosAdapter.ViewHolder>() {
 
     private val produtos = produtos.toMutableList()
+    private lateinit var imageLoader: ImageLoader
 
     class ViewHolder(private val binding: ProdutoItemBinding): RecyclerView.ViewHolder(binding.root) {
         fun vincular(produto: Produto) {
@@ -31,7 +37,11 @@ class ListaProdutosAdapter(
             val valorEmMoeda = formatarValorParaMoedaBrasileira(produto.valor)
             valor.text = valorEmMoeda
 
-            binding.imageView.load("")
+            if(produto.imagem == null){
+                binding.imageView.visibility = View.GONE
+            } else {
+                binding.imageView.tentaCarregarImagem(produto.imagem)
+            }
         }
 
         private fun formatarValorParaMoedaBrasileira(valor: BigDecimal): String? {
@@ -43,7 +53,20 @@ class ListaProdutosAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(context)
         val binding = ProdutoItemBinding.inflate(inflater, parent, false)
+        initImageLoader()
         return ViewHolder(binding)
+    }
+
+    private fun initImageLoader() {
+        imageLoader = ImageLoader.Builder(context)
+            .components {
+                if (Build.VERSION.SDK_INT >= 28) {
+                    add(ImageDecoderDecoder.Factory())
+                } else {
+                    add(GifDecoder.Factory())
+                }
+            }
+            .build()
     }
 
     override fun getItemCount(): Int = produtos.size

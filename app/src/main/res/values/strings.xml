@@ -7,4 +7,5 @@
     <string name="add_product">Adicionar produto</string>
     <string name="carregar">Carregar</string>
     <string name="url_da_imagem">URL da imagem</string>
+    <string name="cadastrar_produto">Cadastrar produto</string>
 </resources>
