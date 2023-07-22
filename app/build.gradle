@@ -48,4 +48,5 @@ dependencies {
 
     implementation "io.coil-kt:coil:1.2.2"
     implementation "io.coil-kt:coil-gif:2.4.0"
+    implementation 'com.google.code.gson:gson:2.10.1'
 }
