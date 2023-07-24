@@ -5,15 +5,16 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.rbcl.orgs.dao.ProdutosDao
 import com.rbcl.orgs.databinding.ActivityListaProdutosBinding
+import com.rbcl.orgs.helpers.CHAVE_PRODUTO
 import com.rbcl.orgs.ui.recyclerview.adapter.ListaProdutosAdapter
 
-class ListaProdutosActivity: AppCompatActivity() {
+class ListaProdutosActivity : AppCompatActivity() {
     private val binding by lazy {
         ActivityListaProdutosBinding.inflate(layoutInflater)
     }
 
     private val dao = ProdutosDao()
-    private val adapter = ListaProdutosAdapter(dao.buscaTodos(), this@ListaProdutosActivity)
+    private val adapter = ListaProdutosAdapter(context = this, produtos = dao.buscaTodos())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,5 +43,14 @@ class ListaProdutosActivity: AppCompatActivity() {
     private fun configuraRecyclerView() {
         val recyclerView = binding.activityListaProdutosRecycler
         recyclerView.adapter = adapter
+        adapter.quandoClicaNoItem = {
+            val intent = Intent(
+                this,
+                DetalhesProdutoActivity::class.java
+            ).apply {
+                putExtra(CHAVE_PRODUTO, it)
+            }
+            startActivity(intent)
+        }
     }
 }
