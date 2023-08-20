@@ -8,4 +8,6 @@
     <string name="carregar">Carregar</string>
     <string name="url_da_imagem">URL da imagem</string>
     <string name="cadastrar_produto">Cadastrar produto</string>
+    <string name="editar">Editar</string>
+    <string name="excluir">Excluir</string>
 </resources>
